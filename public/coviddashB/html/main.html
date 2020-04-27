@@ -99,7 +99,7 @@
 									<p style="color: blue; font-weight: 530; font-size: 14px;">
 									Add More
 									<!--&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&ensp;&nbsp;-->
-										<form action="/api/generate/" enctype="multipart/form-data" method="post">
+										<form action="/api/admin/upload" enctype="multipart/form-data" method="post">
 											<input type="file" name="file-to-upload">
 											<input type="submit" value="Upload">
 										</form>
@@ -217,29 +217,29 @@
 					</p>
 			
 					<p>
-						<a href="http://localhost:3000/api/generate/prepareData" style="color: blue;float: left;">Prepare Data &nbsp;
+						<a class="ajaxLink" href="http://localhost:3000/api/generate/data/prepare" style="color: blue;float: left;">Prepare Data &nbsp;
 					</p>
 			
 					<p>
-						<a href="http://localhost:3000/api/generate/createModels" style="color: blue;float: left;">Create Models
+						<a class="ajaxLink" href="http://localhost:3000/api/generate/model/create" style="color: blue;float: left;">Create Models
 						&nbsp;
 					</p>
 			
 					<p>
-						<a href="http://localhost:3000/api/generate/loadModules" style="color: blue;float: left;">Load Modules &nbsp;
+						<a class="ajaxLink" href="http://localhost:3000/api/generate/model/load" style="color: blue;float: left;">Load Modules &nbsp;
 					</p>
 			
 					<p>
-						<a href="http://localhost:3000/api/generate/loadData" style="color: blue;float: left;">Load Data &nbsp;
+						<a class="ajaxLink" href="http://localhost:3000/api/generate/data/load" style="color: blue;float: left;">Load Data &nbsp;
 					</p>
 			
 					<p>
-						<a href="http://localhost:3000/api/generate/createRoutes" style="color: blue;float: left;">Create Routes
+						<a class="ajaxLink" href="http://localhost:3000/api/generate/route/create" style="color: blue;float: left;">Create Routes
 						&nbsp;
 					</p>
 			
 					<p>
-						<a href="http://localhost:3000/api/generate/loadRoutes" style="color: blue;float: left;">Load Routes &nbsp;
+						<a class="ajaxLink" href="http://localhost:3000/api/generate/route/load" style="color: blue;float: left;">Load Routes &nbsp;
 					</p>
 			
 					<div style="float:right;margin-right: 10%;width: 10%;">
@@ -277,6 +277,53 @@
 		<script src="../assets/js/utils.js"></script>
 
 		<script>
+
+			// override submit all every f*king forms
+			$(document).on('submit', 'form', e => {
+				e.preventDefault();
+				let form = $(e.target);
+
+				let url = form.attr('action');
+				let postdata = {
+					token: getcookie("token")
+				};
+
+				let regex = /^http(s)?:\/\/(.*)\/api\/generate\/api\/(.*)\/(.*)$/;
+				let matched = url.match(regex);
+				let idtoclick = matched[3];
+
+				formdata = form.serializeArray();
+				formdata.forEach(obj => {
+					postdata[obj.name] = obj.value;
+				});
+
+				$.ajax({
+					url: url,
+					method: "POST",
+					data: postdata,
+					success: (res) => {
+						console.log(res.status);
+						$(`#${idtoclick}`).click();
+						$('#popUpdateDiv').hide();
+					}
+				});
+			});
+
+			$('.ajaxLink').on('click', e => {
+				e.preventDefault();
+				$.ajax({
+					url: e.target.href,
+					method: "GET",
+					data: {
+						token: getcookie("token")
+					},
+					success: (res) => {
+						console.log(res.status);
+						
+					}
+				});
+			});			
+
 			const apihost = "http://localhost:3000/api";
 
 			var selectedId;
@@ -398,9 +445,9 @@
 					var formPopUpdate = document.getElementById("popupUpdateForm");
 					var formPopDelete = document.getElementById("popupDeleteForm");
 
-					formPopAdd.action = "/api/generate/api/" + currentNav;
-					formPopUpdate.action = "/api/generate/api/" + currentNav + "/" + selectedId;
-					formPopDelete.action = "/api/generate/api/" + currentNav + "/" + selectedId;
+					formPopAdd.action = "http://localhost:3000/api/generate/api/" + currentNav;
+					formPopUpdate.action = "http://localhost:3000/api/generate/api/" + currentNav + "/" + selectedId;
+					formPopDelete.action = "http://localhost:3000/api/generate/api/" + currentNav + "/" + selectedId;
 
 					var HSearch = document.createElement("h1");
 					var HAdd = document.createElement("h1");
@@ -544,12 +591,12 @@
 
 				if (params.id == "Add") {
 					var formPopAdd = document.getElementById("popupAddForm");
-					formPopAdd.action = "/api/generate/api/" + currentNav;
+					formPopAdd.action = "http://localhost:3000/api/generate/api/" + currentNav;
 					document.getElementById('popAddDiv').style.display = 'block';
 				}
 				if (params.id == "Update") {
 					var formPopUpdate = document.getElementById("popupUpdateForm");
-					formPopUpdate.action = "/api/generate/api/" + currentNav + "/" + selectedId;
+					formPopUpdate.action = "http://localhost:3000/api/generate/api/" + currentNav + "/" + selectedId;
 
 					var Tr = document.getElementById(selectedId);
 					var formbodyUpdate = document.getElementById("popupUpdateBody");
@@ -568,7 +615,7 @@
 				}
 				if (params.id == "Delete") {
 					var formPopDelete = document.getElementById("popupDeleteForm");
-					formPopDelete.action = "/api/generate/api/" + currentNav + "/" + selectedId;
+					formPopDelete.action = "http://localhost:3000/api/generate/api/" + currentNav + "/" + selectedId;
 					document.getElementById('popDeleteDiv').style.display = 'block';
 				}
 

@@ -14,23 +14,11 @@ const create_main_window = () => {
 			nodeIntegration: true,
 		},
 	});
-	let main_url;
-	// if no development, force app to use frontend/dist directory
-	if (process.env.NODE_ENV === "development") {
-		main_url =
-			process.env.ELECTRON_DEV_URL ||
-			url.format({
-				pathname: path.join(__dirname, "/../frontend/dist/index.html"),
-				protocol: "file:",
-				slashes: true,
-			});
-	} else {
-		main_url = url.format({
-			pathname: path.join(__dirname, "/../frontend/dist/index.html"),
-			protocol: "file:",
-			slashes: true,
-		});
-	}
+	let main_url = url.format({
+		pathname: path.join(__dirname, "/../public/coviddashB/html/main.html"),
+		protocol: "file:",
+		slashes: true
+	});
 
 	if (!main_url) {
 		console.log(
@@ -65,6 +53,8 @@ const template = [
 	{
 		label: "Help",
 		submenu: [
+			{ role: 'reload' },
+			{ role: 'toggledevtools' },
 			{
 				label: "Learn More",
 				click: async () => {
