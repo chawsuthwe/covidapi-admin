@@ -258,8 +258,13 @@
 		</div>
 
 		<!--   Core JS Files   -->
-		<script src="../assets/js/core/jquery.min.js"></script>
-		<script src="../assets/js/core/popper.min.js"></script>
+		<!-- <script src="../assets/js/core/jquery.min.js"></script>
+		<script src="../assets/js/core/popper.min.js"></script> -->
+		<script>
+			window.$ = window.jQuery = require("../assets/js/core/jquery.min.js");
+			window.Popper = require("../assets/js/core/popper.min.js");
+		</script>
+
 		<script src="../assets/js/core/bootstrap.min.js"></script>
 		<script src="../assets/js/plugins/perfect-scrollbar.jquery.min.js"></script>
 	  
@@ -275,7 +280,6 @@
 		<!-- Paper Dashboard DEMO methods, don't include it in your project! -->
 		<script src="../assets/demo/demo.js"></script>
 		<script src="../assets/js/utils.js"></script>
-
 		<script>
 
 			// override submit all every f*king forms

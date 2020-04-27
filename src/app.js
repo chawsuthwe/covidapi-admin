@@ -17,7 +17,7 @@ const create_main_window = () => {
 	let main_url = url.format({
 		pathname: path.join(__dirname, "/../public/coviddashB/html/main.html"),
 		protocol: "file:",
-		slashes: true
+		slashes: true,
 	});
 
 	if (!main_url) {
@@ -53,8 +53,8 @@ const template = [
 	{
 		label: "Help",
 		submenu: [
-			{ role: 'reload' },
-			{ role: 'toggledevtools' },
+			{ role: "reload" },
+			{ role: "toggledevtools" },
 			{
 				label: "Learn More",
 				click: async () => {
